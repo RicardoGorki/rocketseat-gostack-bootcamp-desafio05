@@ -27,7 +27,7 @@ export const SubmitButton = styled.button.attrs(props => ({
   type: 'submit',
   disabled: props.loading,
 }))`
-  background: #7159c1;
+  background: #90bfff;
   border: 0;
   padding: 0 15px;
   margin-left: 10px;
@@ -60,15 +60,24 @@ export const List = styled.ul`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
 
     & + li {
       border-top: 1px solid #eee;
     }
 
     a {
-      color: #7159c1;
+      color: #0066cc;
       text-decoration: none;
+    }
+
+    .svgList {
+      display: flex;
+      align-items: center;
+    }
+    svg {
+      margin-left: 10px;
+      cursor: pointer;
+      color: #ddd;
     }
   }
 `;

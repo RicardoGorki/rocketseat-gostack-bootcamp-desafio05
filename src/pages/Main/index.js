@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
+import { FaGithubAlt, FaPlus, FaSpinner, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Form, SubmitButton, List } from './styles';
 import Container from '../../components/Container';
@@ -32,22 +32,32 @@ export default class Main extends Component {
     this.setState({ newRepo: e.target.value });
   };
 
+  handleDelete = repository => {
+    this.setState({
+      repositories: this.state.repositories.filter(r => r !== repository),
+    });
+  };
+
   handleSubmit = async e => {
     e.preventDefault();
 
-    this.setState({ loading: true });
-    const { newRepo, repositories } = this.state;
-    const response = await api.get(`/repos/${newRepo}`);
+    try {
+      this.setState({ loading: true });
+      const { newRepo, repositories } = this.state;
+      const response = await api.get(`/repos/${newRepo}`);
 
-    const data = {
-      name: response.data.full_name,
-    };
+      const data = {
+        name: response.data.full_name,
+      };
 
-    this.setState({
-      repositories: [...repositories, data],
-      newRepo: '',
-      loading: false,
-    });
+      this.setState({
+        repositories: [...repositories, data],
+        newRepo: '',
+        loading: false,
+      });
+    } catch {
+      throw new Error('Repositório duplicado');
+    }
   };
 
   render() {
@@ -67,7 +77,7 @@ export default class Main extends Component {
             onChange={this.handleInputChange}
           />
 
-          <SubmitButton loading={loading}>
+          <SubmitButton loading={loading ? 1 : 0}>
             {loading ? (
               <FaSpinner color="#FFF" size={14} />
             ) : (
@@ -79,9 +89,15 @@ export default class Main extends Component {
           {repositories.map(repository => (
             <li key={repository.name}>
               <span>{repository.name}</span>
-              <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                Detalhes
-              </Link>
+              <span className="svgList">
+                <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
+                  Detalhes
+                </Link>
+                <FaTrash
+                  key={repository}
+                  onClick={() => this.handleDelete(repository)}
+                />
+              </span>
             </li>
           ))}
         </List>
