@@ -101,3 +101,61 @@ export const IssueList = styled.ul`
     }
   }
 `;
+
+export const ListState = styled.div`
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  max-width: 650px;
+  padding: 0;
+
+  button {
+    background-color: #24292e;
+    border: none;
+    color: white;
+    margin: 0 15px 0px 15px;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 7%;
+    width: 90px;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  button:hover {
+    background: #aaa;
+  }
+`;
+
+export const PageActions = styled.div`
+  padding-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+
+  button {
+    background-color: #24292e;
+    border: none;
+    color: white;
+    margin: 0 15px 0px 15px;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    border-radius: 7%;
+    width: 90px;
+    -webkit-font-smoothing: antialiased !important;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  button:hover {
+    background: #aaa;
+  }
+`;

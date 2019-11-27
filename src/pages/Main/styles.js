@@ -4,13 +4,6 @@ export const Form = styled.form`
   margin-top: 30px;
   display: flex;
   flex-direction: row;
-
-  input {
-    flex: 1;
-    border: 1px solid #eee;
-    padding: 10px 15px;
-    font-size: 16px;
-  }
 `;
 
 const rotate = keyframes`
@@ -27,7 +20,7 @@ export const SubmitButton = styled.button.attrs(props => ({
   type: 'submit',
   disabled: props.loading,
 }))`
-  background: #90bfff;
+  background: #24292e;
   border: 0;
   padding: 0 15px;
   margin-left: 10px;
@@ -77,7 +70,24 @@ export const List = styled.ul`
     svg {
       margin-left: 10px;
       cursor: pointer;
-      color: #ddd;
+      color: #777;
     }
   }
+`;
+
+export const InputForm = styled.input.attrs(props => ({
+  type: 'text',
+  placeholder: 'Add repository',
+  hasRepo: props.hasRepo,
+}))`
+  flex: 1;
+  border: 1px solid #eee;
+  padding: 10px 15px;
+  font-size: 16px;
+
+  ${props =>
+    props.errorInput &&
+    css`
+      border-color: red;
+    `}
 `;

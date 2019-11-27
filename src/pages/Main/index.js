@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 
 import { FaGithubAlt, FaPlus, FaSpinner, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { Form, SubmitButton, List } from './styles';
+import { ToastContainer, toast } from 'react-toastify';
+import { Form, SubmitButton, List, InputForm } from './styles';
 import Container from '../../components/Container';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 import api from '../../services/api';
 
@@ -44,7 +47,16 @@ export default class Main extends Component {
     try {
       this.setState({ loading: true });
       const { newRepo, repositories } = this.state;
+
+      if (newRepo === '') throw new Error('Write the name of some repository');
+
       const response = await api.get(`/repos/${newRepo}`);
+
+      const hasRepo = repositories.find(
+        r => r.name === response.data.full_name
+      );
+
+      if (hasRepo) throw new Error('Duplicated Repository');
 
       const data = {
         name: response.data.full_name,
@@ -55,24 +67,33 @@ export default class Main extends Component {
         newRepo: '',
         loading: false,
       });
-    } catch {
-      throw new Error('Repositório duplicado');
+    } catch (error) {
+      this.setState({
+        errorInput: true,
+        errorMessage: error.response
+          ? toast.error(error.response.data.message)
+          : toast.error(error.message),
+      });
+    } finally {
+      this.setState({ loading: false });
     }
   };
 
   render() {
-    const { newRepo, repositories, loading } = this.state;
+    const { newRepo, repositories, loading, errorInput } = this.state;
     return (
       <Container>
+        <ToastContainer autoClose={2000} position="top-center" />
         <h1>
           <FaGithubAlt />
-          Repositórios
+          Repositories
         </h1>
 
         <Form onSubmit={this.handleSubmit}>
-          <input
+          <InputForm
+            errorInput={errorInput}
             type="text"
-            placeholder="Adicionar repositório"
+            placeholder="Add repository"
             value={newRepo}
             onChange={this.handleInputChange}
           />
@@ -91,7 +112,7 @@ export default class Main extends Component {
               <span>{repository.name}</span>
               <span className="svgList">
                 <Link to={`/repository/${encodeURIComponent(repository.name)}`}>
-                  Detalhes
+                  Details
                 </Link>
                 <FaTrash
                   key={repository}
